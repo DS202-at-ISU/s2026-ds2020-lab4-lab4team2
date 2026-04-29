@@ -6,6 +6,10 @@ date: "2026-04-29"
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(rvest)
+library(Lahman)
+library(tidyverse)
+head(HallOfFame, 3)
 ```
 
 ## R Markdown
@@ -14,16 +18,65 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
+##Clean dataset
+
+```{r}
+library(rvest)
+library(tidyverse)
+library(Lahman)
+
+url <- "https://www.baseball-reference.com/awards/hof_2026.shtml"
+
+page <- read_html(url)
+
+hof_node <- page %>%
+  html_element("#hof_BBWAA")
+
+col_names <- hof_node %>%
+  html_elements("thead tr") %>%
+  .[[2]] %>%
+  html_elements("th") %>%
+  html_text()
+
+hof_raw <- hof_node %>%
+  html_table(fill = TRUE)
+
+names(hof_raw) <- make.names(col_names, unique = TRUE)
+
+names(hof_raw)
+
+hof_clean <- hof_raw %>%
+  
+  mutate(
+    Votes = as.numeric(Votes),
+    
+    percent_vote = as.numeric(
+      str_remove(X.vote, "%")
+    ),
+    
+    year = 2026,
+    
+    inducted = if_else(percent_vote >= 75, "Y", "N")
+  ) %>%
+  
+  select(
+    candidate = Name,
+    year,
+    votes = Votes,
+    percent_vote,
+    inducted
+  )
+
+hof_clean
+
+write_csv(hof_clean, "hof_2026_clean.csv")
+
+HallOfFame %>%
+  filter(yearID == 2026)
+
+HallOfFame %>% 
+  ggplot(aes(x = yearID, fill = inducted)) +
+  geom_bar() +
+  xlim(c(1936, 2026))
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
