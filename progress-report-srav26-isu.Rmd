@@ -47,22 +47,56 @@ head(hof)
 
 
 ```{r}
+hof_2026 <- hof %>%
+  filter(yearID == 2026)
 
+head(hof_2026)
 ```
 
 ```{r}
+hof_clean <- hof_2026 %>%
+  select(playerID, yearID, inducted, category)
 
+head(hof_clean)
 ```
-
+## Observations
+The Lahman dataset stores Hall of Fame data differently.
+It uses player IDs instead of names and includes whether a player was inducted.
+This dataset does not directly match the scraped voting table.
 
 ```{r}
-
+hof_clean %>%
+  filter(inducted == "Y") %>%
+  count()
 ```
 
 ```{r}
+library(Lahman)
 
+people <- People
+
+people_clean <- people %>%
+  select(playerID, nameFirst, nameLast) %>%
+  mutate(Name = paste(nameFirst, nameLast))
+
+hof_names <- hof_clean %>%
+  left_join(people_clean, by = "playerID")
+
+head(hof_names)
+comparison <- data_clean %>%
+  left_join(hof_names, by = "Name")
+
+head(comparison)
 ```
 
 ```{r}
-
+comparison %>%
+  filter(inducted == "Y")
 ```
+
+## Conclusion
+The scraping process successfully retrieved Hall of Fame voting data.
+However, comparing it with the Lahman dataset was challenging due to differences in data structure and naming conventions.
+This shows that data cleaning and standardization are important when combining datasets.
+
+
