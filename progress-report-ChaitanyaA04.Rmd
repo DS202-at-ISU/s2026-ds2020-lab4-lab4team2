@@ -46,10 +46,27 @@ hof_2026 <- data_clean %>%
 
 head(hof_2026)
 
-
-
 ```
 
 ```{r}
 write_csv(hof_2026, "HallOfFame_2026.csv")
 ```
+
+Data Source
+
+I scraped Hall of Fame 2026 voting data from Baseball Reference:
+https://www.baseball-reference.com/awards/hof_2026.shtml
+
+Data Collection
+
+Using the rvest package, I extracted the Hall of Fame voting table by targeting its HTML id (#hof_BBWAA) to avoid unrelated tables.
+
+Data Cleaning
+
+I kept only the Name, Votes, and percent of votes columns.
+I removed repeated header rows, converted Votes to numeric, and used parse_number() to clean percentage values.
+I added a yearID column (2026) and created an inducted column where candidates with ≥75% votes are marked "Y".
+
+Final Dataset
+
+The final dataset contains: Name, yearID, Votes, percent_vote, and inducted, and is saved as a CSV file.
