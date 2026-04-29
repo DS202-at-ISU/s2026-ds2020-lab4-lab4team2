@@ -17,7 +17,7 @@ url <- "https://www.baseball-reference.com/awards/hof_2026.shtml"
 html <- read_html(url)
 
 data <- html %>%
-  html_element("#hof_BBWAA") %>%   # THIS targets correct table
+  html_element("#hof_BBWAA") %>%   
   html_table(fill = TRUE)
 
 head(data)
@@ -46,6 +46,12 @@ hof_2026 <- data_clean %>%
 
 head(hof_2026)
 
+lahman_2026 <- HallOfFame %>%
+  filter(yearID == 2026)
+
+# Compare counts
+hof_2026 %>% count(inducted)
+lahman_2026 %>% count(votedBy, inducted)
 ```
 
 ```{r}
@@ -66,6 +72,12 @@ Data Cleaning
 I kept only the Name, Votes, and percent of votes columns.
 I removed repeated header rows, converted Votes to numeric, and used parse_number() to clean percentage values.
 I added a yearID column (2026) and created an inducted column where candidates with ≥75% votes are marked "Y".
+
+Comparison with Lahman
+
+I compared the scraped dataset with the Lahman HallOfFame table for 2026. The two datasets do not match exactly because Baseball Reference includes the full BBWAA ballot, while the Lahman dataset stores official voting results and may include different voting categories.
+
+As a result, the scraped dataset contains more candidates, while the Lahman dataset focuses on official records. This difference is expected and reflects how the two sources organize Hall of Fame data.
 
 Final Dataset
 
