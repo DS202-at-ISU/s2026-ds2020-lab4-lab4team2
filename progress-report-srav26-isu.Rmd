@@ -1,0 +1,38 @@
+---
+title: "progress-report-srav26-isu"
+output: html_document
+---
+
+```{r}
+install.packages("janitor")
+library(tidyverse)
+library(rvest)
+library(Lahman)
+library(janitor)
+```
+
+```{r}
+url <- "https://www.baseball-reference.com/awards/hof_2026.shtml"
+```
+
+
+```{r}
+page <- read_html(url)
+
+tables <- page %>% html_table(fill = TRUE)
+
+# Look at tables
+tables
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
