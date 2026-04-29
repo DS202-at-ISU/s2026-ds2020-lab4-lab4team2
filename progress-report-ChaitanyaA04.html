@@ -416,6 +416,20 @@ head(hof_2026)</code></pre>
 ## 5 Félix Hernández   2026   196         46.1 N       
 ## 6 Alex Rodriguez    2026   170         40   N</code></pre>
 <pre class="r"><code>write_csv(hof_2026, &quot;HallOfFame_2026.csv&quot;)</code></pre>
+<p>Data Source</p>
+<p>I scraped Hall of Fame 2026 voting data from Baseball Reference: <a href="https://www.baseball-reference.com/awards/hof_2026.shtml" class="uri">https://www.baseball-reference.com/awards/hof_2026.shtml</a></p>
+<p>Data Collection</p>
+<p>Using the rvest package, I extracted the Hall of Fame voting table by
+targeting its HTML id (#hof_BBWAA) to avoid unrelated tables.</p>
+<p>Data Cleaning</p>
+<p>I kept only the Name, Votes, and percent of votes columns. I removed
+repeated header rows, converted Votes to numeric, and used
+parse_number() to clean percentage values. I added a yearID column
+(2026) and created an inducted column where candidates with ≥75% votes
+are marked “Y”.</p>
+<p>Final Dataset</p>
+<p>The final dataset contains: Name, yearID, Votes, percent_vote, and
+inducted, and is saved as a CSV file.</p>
 
 
 
