@@ -3,27 +3,57 @@ title: "progress-report-srav26-isu"
 output: html_document
 ---
 
-```{r}
-install.packages("janitor")
-library(tidyverse)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 library(rvest)
+library(dplyr)
+library(readr)
 library(Lahman)
-library(janitor)
 ```
 
 ```{r}
-url <- "https://www.baseball-reference.com/awards/hof_2026.shtml"
+tables[[1]] %>% head()
+tables[[2]] %>% head()
+```
+
+```{r}
+data <- tables[[1]]
+
+head(data)
+colnames(data)
+```
+
+```{r}
+data <- tables[[1]]
+
+# Fix column names
+colnames(data) <- data[1, ]
+data <- data[-1, ]
+
+# Clean dataset
+data_clean <- data %>%
+  select(Name, Votes, `%vote`)
+
+head(data_clean)
+```
+
+```{r}
+
+hof <- HallOfFame
+
+head(hof)
 ```
 
 
 ```{r}
-page <- read_html(url)
 
-tables <- page %>% html_table(fill = TRUE)
-
-# Look at tables
-tables
 ```
+
+```{r}
+
+```
+
 
 ```{r}
 
