@@ -12,3 +12,44 @@ library(readr)
 library(Lahman)
 ```
 
+```{r}
+url <- "https://www.baseball-reference.com/awards/hof_2026.shtml"
+html <- read_html(url)
+
+data <- html %>%
+  html_element("#hof_BBWAA") %>%   # THIS targets correct table
+  html_table(fill = TRUE)
+
+head(data)
+
+colnames(data)
+```
+
+```{r}
+data_clean <- data[, c(2, 4, 5)]
+
+colnames(data_clean) <- c("Name", "Votes", "percent_vote")
+```
+
+```{r}
+data_clean <- data_clean %>%
+  filter(Name != "Name") %>%
+  mutate(
+    Votes = as.numeric(Votes),
+    percent_vote = parse_number(as.character(percent_vote)),
+    yearID = 2026,
+    inducted = ifelse(percent_vote >= 75, "Y", "N")
+  )
+
+hof_2026 <- data_clean %>%
+  select(Name, yearID, Votes, percent_vote, inducted)
+
+head(hof_2026)
+
+
+
+```
+
+```{r}
+write_csv(hof_2026, "HallOfFame_2026.csv")
+```
