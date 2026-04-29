@@ -1,0 +1,14 @@
+---
+title: "Progress Report - Hall of Fame 2026"
+author: "Chaitanya Arravelli"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(rvest)
+library(dplyr)
+library(readr)
+library(Lahman)
+```
+
